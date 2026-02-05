@@ -1,20 +1,48 @@
 import { createNewUserInDatabase } from "@/lib/utils";
 import { Manager, Tenant } from "@/types/prismaTypes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
-export const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    prepareHeaders: async (headers) => {
-      const session = await fetchAuthSession()
-      const { idToken } = session.tokens ?? {}
-      if (idToken) {
-        headers.set("Authorization", `Bearer ${idToken}`);
-      }
-      return headers
+let isRedirecting = false;
+
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+  prepareHeaders: async (headers) => {
+    const session = await fetchAuthSession();
+    const { idToken } = session.tokens ?? {};
+    if (idToken) {
+      headers.set("Authorization", `Bearer ${idToken}`);
     }
-  }),
+    return headers;
+  },
+});
+
+const baseQueryWithRedirect: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  const result = await rawBaseQuery(args, api, extraOptions);
+
+  if (
+    result.error &&
+    (result.error.status === 500 ||
+      result.error.status === 502 ||
+      result.error.status === 503 ||
+      result.error.status === "FETCH_ERROR")
+  ) {
+    if (!isRedirecting && typeof window !== "undefined") {
+      isRedirecting = true;
+      window.location.href = "/maintenance";
+    }
+  }
+
+  return result;
+};
+
+export const api = createApi({
+  baseQuery: baseQueryWithRedirect,
   reducerPath: "api",
   tagTypes: ["Managers", "Tenants"],
   endpoints: (build) => ({
@@ -46,7 +74,12 @@ export const api = createApi({
             }
           }
         } catch (error: any) {
-          return { error: error.message  || "Không thể lấy thông tin người dùng"}
+          return { 
+            error: {
+              status: 'FETCH_ERROR',
+              data: error?.message || "Không thể lấy thông tin người dùng",
+            } as FetchBaseQueryError
+          }
         }
       }
     }),
