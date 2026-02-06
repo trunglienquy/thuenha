@@ -142,7 +142,7 @@ export const getProperties = async (
         const properties = await prisma.$queryRaw(completeQuery)
         res.json(properties);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Error for getProperties: ${error.message}` });
     }
 }
 
@@ -179,7 +179,7 @@ export const getProperty = async (
             res.json(propertyWithCoordinates);
         }
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Error for getProperty: ${error.message}` });
     }
 }
 
@@ -263,6 +263,6 @@ export const createProperty = async (
 
         res.status(201).json(newProperty);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Error for createProperty: ${error.message}` });
     }
 }

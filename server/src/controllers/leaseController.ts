@@ -16,7 +16,7 @@ export const getLeases = async (
         })
         res.status(200).json(leases);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for getLeases: ${error.message}` });
     }
 }
 
@@ -31,6 +31,6 @@ export const getLeasePayment = async (
         })
         res.status(200).json(payment);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for getLeasePayment: ${error.message}` });
     }
 }

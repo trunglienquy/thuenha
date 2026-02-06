@@ -16,7 +16,7 @@ export const getManager = async (req: Request, res: Response): Promise<void> => 
             res.status(404).json({ message: "Manager not found" });
         }
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for getManager: ${error.message}` });
     }
 }
 
@@ -33,7 +33,7 @@ export const createManager = async (req: Request, res: Response): Promise<void> 
         })
         res.status(201).json(manager);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for createManager: ${error.message}` });
     }
 }
 
@@ -51,7 +51,7 @@ export const updateManager = async (req: Request, res: Response): Promise<void> 
         })
         res.status(200).json(manager);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for updateManager: ${error.message}` });
     }
 }
 
@@ -92,6 +92,6 @@ export const getManagerProperties = async (
         res.json(propertiesWithFormattedLocation);
 
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Error for getManagerProperties: ${error.message}` });
     }
 }

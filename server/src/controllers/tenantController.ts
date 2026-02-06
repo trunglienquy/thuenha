@@ -19,7 +19,7 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
             res.status(404).json({ message: "Tenant not found" });
         }
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for getTenant: ${error.message}` });
     }
 }
 
@@ -36,7 +36,7 @@ export const createTenant = async (req: Request, res: Response): Promise<void> =
         })
         res.status(201).json(tenant);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for createTenant: ${error.message}` });
     }
 }
 
@@ -54,7 +54,7 @@ export const updateTenant = async (req: Request, res: Response): Promise<void> =
         })
         res.status(200).json(updateTenant);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for updateTenant: ${error.message}` });
     }
 }
 
@@ -95,7 +95,7 @@ export const getCurrentResidences = async (
         res.json(residencesWithFormattedLocation);
 
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Error for getCurrentResidences: ${error.message}` });
     }
 }
 
@@ -127,7 +127,7 @@ export const addFavoriteProperty = async (
             res.status(400).json({ message: "Property is already in favorites" });
         }
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for addFavoriteProperty: ${error.message}` });
     }
 }
 
@@ -149,6 +149,6 @@ export const removeFavoriteProperty = async (
         })
         res.json(updatedTenant);
     } catch (error: any) {
-        res.status(500).json({ message: `Error: ${error.message}` });
+        res.status(500).json({ message: `Error for removeFavoriteProperty: ${error.message}` });
     }
 }

@@ -10,6 +10,7 @@ import tenantRoutes from './routes/tenantRoles.js';
 import managerRoutes from './routes/managerRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js';
 import leaseRoutes from './routes/leaseRoutes.js';
+import applicationRoutes from './routes/applicationRoutes.js';
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -35,6 +36,7 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.use("/applications", applicationRoutes)
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
 app.use("/managers", authMiddleware(["manager"]), managerRoutes);
 app.use("/properties", propertyRoutes);
